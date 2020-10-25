@@ -11,6 +11,7 @@ const (
 	PacketIDCarTelemetry                      // PacketCarTelemetryData
 	PacketIDCarStatus                         // PacketCarStatusData
 	PacketIDFinalClassification               // PacketFinalClassificationData
+	PacketIDLobbyInfo                         // PacketLobbyInfoData
 )
 
 // PacketHeader ...

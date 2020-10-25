@@ -6,12 +6,14 @@ import (
 	"net"
 	"os"
 
+	"github.com/trunghai95/f1-telemetry/model"
+
 	"github.com/trunghai95/f1-telemetry/config"
 )
 
 var (
-	configPath = flag.String("configPath", "../.conf/config.yaml", "YAML config path")
-	logPath    = flag.String("logPath", "./log/app.log", "Path to write log")
+	configPath = flag.String("configPath", "./.conf/config.yaml", "YAML config path")
+	logPath    = flag.String("logPath", "", "Path to write log")
 )
 
 func main() {
@@ -27,7 +29,7 @@ func main() {
 		log.Fatalf("Init config err: %v", err)
 	}
 
-	log.Println("Starting...")
+	log.Printf("Starting listening UDP at %v", config.GetAppConfig().UDPListen)
 	startUDPServer()
 }
 
@@ -63,8 +65,11 @@ func startUDPServer() {
 			log.Printf("Read UDP msg err: %v", err)
 			continue
 		}
-		log.Printf("DEBUG | Received %v bytes from %v", nBytes, addr.String())
+		log.Printf("Received %v bytes from %v", nBytes, addr.String())
 
-		// TODO: Parse the message
+		err = model.ParsePacket(buf)
+		if err != nil {
+			log.Printf("Parse packet err: %v", err)
+		}
 	}
 }
